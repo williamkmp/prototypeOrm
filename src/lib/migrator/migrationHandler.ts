@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
-import { ClientSchema  } from "../schema/schemaManager.js";
+import { ClientSchema } from "../schema/schemaManager.js";
+import { TableSchema } from "../table/tableSchema.js";
 
 export type Config = mysql.ConnectionOptions;
 export type Connection = mysql.Connection;
@@ -9,7 +10,7 @@ export type Connection = mysql.Connection;
  */
 export class MigrationHandler {
 	private databaseConfig: Config;
-	private tableSchemas: any[];
+	private tableSchemas: Array<TableSchema>;
 	private database: Connection | null;
 
 	constructor(client: ClientSchema) {
@@ -33,13 +34,45 @@ export class MigrationHandler {
 	}
 
 	/**
-     * ASYNC
-     * migrate parsed client schema to the database
-     * using connection created from DATABSE_CONFIG
+	 * get all DROP TABLE queries from the database
+	 * @returns {Promise<Array<string>>} drop queries
+	 */
+	private async getEmptyQueries(): Promise<Array<string>> {
+		let queries: Array<string> = [];
+		try {
+			let database = await this.connect();
+			let [rows] = await database.execute("SHOW TABLES;");
+			let datas = rows as Array<mysql.RowDataPacket>;
+			datas.forEach((row) => {
+				for (let header in row) {
+					queries.push(`DROP TABLE IF EXISTS \`${row[header]}\`;`);
+				}
+			});
+		} catch (error) {
+		} finally {
+			return queries;
+		}
+	}
+
+	/**
+	 * ASYNC
+	 * migrate parsed client schema to the database
+	 * using connection created from DATABSE_CONFIG
 	 * @returns { Promise<void> } database connection
 	 */
 	async migrate(): Promise<void> {
-        this.tableSchemas;
-        //TODO: implement migration
-    }
+		let database = await this.connect();
+		let createQueries = this.tableSchemas.map((schema) => schema.getCreateQuery());
+		let dropQueries = await this.getEmptyQueries();
+		createQueries.forEach(async (query) => {
+			await database.execute(query);
+		});
+		dropQueries.forEach(async (query) => {
+			await database.execute(query);
+		});
+		await database.execute("SET foreign_key_checks=1;");
+
+		this.tableSchemas;
+		//TODO: implement migration
+	}
 }
