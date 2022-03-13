@@ -1,13 +1,26 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { join } from "path" ;
+import { join } from "path";
+import { ConnectionOptions } from "mysql2/promise";
 import { BOILERPLATE as SchemaBoilerPlate } from "./schemaBoilerPlate.js";
+import { ColumnSchema } from "../columns/column.js"
+import { TableSchema } from "../table/tableSchema.js"
+
+type config = {
+	[tableName: string]: Array<ColumnSchema>;
+};
+type tables = {
+	DATABASE_CONFIG: ConnectionOptions;
+};
+export type UnParsedSchema = config & tables;
+export type ClientSchema = [ConnectionOptions, Array<TableSchema>];
 
 /**
  * class to manage user schema
  * function:
  * - generate schema
- * - read schema 
- * - chec schema
+ * - read schema
+ * - check schema
+ * -
  * @author william
  */
 export class SchemaManager {
@@ -20,7 +33,7 @@ export class SchemaManager {
 
 	constructor() {
 		this.clientSchemaFolderPath = "file:///" + join(process.cwd(), "/schema");
-        this.clientSchemaFilePath = "file:///" + join(process.cwd(), "/schema/schema.js");
+		this.clientSchemaFilePath = "file:///" + join(process.cwd(), "/schema/schema.js");
 	}
 
 	/**
@@ -46,16 +59,37 @@ export class SchemaManager {
 	}
 
 	/**
-	 * Read the client schema if exist
-	 * return null if schema/scahema.js not exist
+	 * try to parse the client schema
+	 * @returns {Promise<ClientSchema | null>} parsed client schema
 	 */
-	async read(): Promise<Object> {
-		let clientSchema;
+	async readSchema(): Promise<ClientSchema | null> {
+		let schema: UnParsedSchema | null;
+		let clientSchema: ClientSchema | null;
+
+		//reading schema
 		try {
-			clientSchema = await import(this.clientSchemaFilePath);
+			schema = (await import(this.clientSchemaFilePath)) as UnParsedSchema;
 		} catch (error) {
+			return null;
+		}
+
+		//parsing
+		let databaseConfig = schema?.DATABASE_CONFIG;
+		let tableSchemas = [];
+
+		for (let tableName in schema) {
+			if (Array.isArray(schema[tableName])) {
+				let tableSchema = new TableSchema(tableName, schema[tableName] as Array<ColumnSchema>)
+				tableSchemas.push(tableSchema);
+			}
+		}
+
+		if (databaseConfig) {
+			clientSchema = [databaseConfig, tableSchemas];
+		} else {
 			clientSchema = null;
 		}
+
 		return clientSchema;
 	}
-};
+}
