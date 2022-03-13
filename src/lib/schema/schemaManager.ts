@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path" ;
-import { BOILERPLATE } from "./schemaBoilerPlate.js";
+import { BOILERPLATE as SchemaBoilerPlate } from "./schemaBoilerPlate.js";
 
 /**
  * class to manage user schema
@@ -11,38 +11,51 @@ import { BOILERPLATE } from "./schemaBoilerPlate.js";
  * @author william
  */
 export class SchemaManager {
-    
-    /**
-     * path to the client schema/scema.js
-     * inside the schema folder 
-     */
-    private clientSchemaPath: string;
-    
-    constructor(){
-        this.clientSchemaPath = "file:///" + join(process.cwd(), "/schema/schema.js");
-    }
+	/**
+	 * path to the client schema/scema.js
+	 * inside the schema folder
+	 */
+	private clientSchemaFolderPath: string;
+	private clientSchemaFilePath: string;
 
-    /**
-     * function to check if client schema.js is initialized
-     * @returns {boolean} schema.js exists or not
-     */
-    exist(): boolean{
-        return existsSync(this.clientSchemaPath);
-    }
+	constructor() {
+		this.clientSchemaFolderPath = "file:///" + join(process.cwd(), "/schema");
+        this.clientSchemaFilePath = "file:///" + join(process.cwd(), "/schema/schema.js");
+	}
 
-    /**
-     * to create schema/schema.js to client project directory
-     * if it already exist overwite the content to the
-     * boilerplate code
-     * @returns {void}
-     */
-    create(): void{
-        if(!existsSync(this.clientSchemaPath)){
-            mkdirSync("schema");
-            mkdirSync(join(this.clientSchemaPath, "/schema"));
-        }
-        //TODO
-        writeFileSync();
-    }
+	/**
+	 * check if client schema.js is initialized
+	 * inside the client directory or not
+	 * @returns {boolean} schema.js exists or not
+	 */
+	exist(): boolean {
+		return existsSync(this.clientSchemaFilePath);
+	}
 
+	/**
+	 * create schema/schema.js to client project directory
+	 * if it already exist overwite the content to the
+	 * boilerplate code
+	 * @returns {void}
+	 */
+	create(): void {
+		if (!existsSync(this.clientSchemaFolderPath)) {
+			mkdirSync("schema");
+		}
+		writeFileSync("schema/schema.js", SchemaBoilerPlate);
+	}
+
+	/**
+	 * Read the client schema if exist
+	 * return null if schema/scahema.js not exist
+	 */
+	async read(): Promise<Object> {
+		let clientSchema;
+		try {
+			clientSchema = await import(this.clientSchemaFilePath);
+		} catch (error) {
+			clientSchema = null;
+		}
+		return clientSchema;
+	}
 };

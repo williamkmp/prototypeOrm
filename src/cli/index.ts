@@ -1,20 +1,33 @@
+#!/usr/bin/env node
 //CLI INDEX.JS
 import { program } from "commander";
+import { SchemaManager } from "../lib/index.js";
+
+program.name("pukis").description("mini ORM created by William KMP and Andre Wijaya").version("1.0.0");
 
 program
-    .name("pukis")
-    .description("mini ORM created by William KMP and Andre Wijaya")
-    .version('1.0.0');
-
-//TODO
-program
-    .command("init")
-    .description("initialize schema for your database")
-    .action(()=>{
-		//TODO: implement action generate schema/schema.js at client project dir
-        
+	.command("init")
+	.description("initialize schema for your database")
+	.action(async (): Promise<void> => {
+		let clientSchemaManager = new SchemaManager();
+		clientSchemaManager.create();
+		return;
 	});
 
-    //TODO: add migrate command
+program
+	.command("migrate")
+	.description("migrate schema.js to the specified database")
+	.action(async (): Promise<void> => {
+		//TODO: implement migrate command action
+		return;
+	});
 
-//TODO: add generate command
+program
+	.command("generate")
+	.description("generate client code API to interact with database")
+	.action(async (): Promise<void> => {
+        //TODO: implement generate command action
+		return;
+	});
+
+program.parse(process.argv);
