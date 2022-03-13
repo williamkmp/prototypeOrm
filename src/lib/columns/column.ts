@@ -22,10 +22,10 @@ export interface ColInfoable {
  * describe a column name, type, constraints
  * for CreateTable
  */
-export function col(columnName: string) {
+export function col(columnName: string): ColumnType {
 	//TODO: test this function
     let colSchema = new ColumnSchema(columnName);
-	return new ColumnSchema(columnName);
+	return new ColumnType(colSchema.__columnInfo);
 }
 
 export class ColumnSchema implements ColInfoable {
