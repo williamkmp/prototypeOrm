@@ -65,6 +65,7 @@ export class MigrationHandler {
 		let database = await this.connect();
 		let createQueries = this.tableSchemas.map((schema) => schema.getCreateQuery());
 		let dropQueries = await this.getEmptyQueries();
+		await database.execute("SET foreign_key_checks=0;");
 		createQueries.forEach(async (query) => {
 			await database.execute(query);
 		});
