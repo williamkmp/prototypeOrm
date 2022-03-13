@@ -61,6 +61,7 @@ export class MigrationHandler {
 	 * @returns { Promise<void> } database connection
 	 */
 	async migrate(): Promise<void> {
+		//TODO: test this function
 		let database = await this.connect();
 		let createQueries = this.tableSchemas.map((schema) => schema.getCreateQuery());
 		let dropQueries = await this.getEmptyQueries();
@@ -71,8 +72,5 @@ export class MigrationHandler {
 			await database.execute(query);
 		});
 		await database.execute("SET foreign_key_checks=1;");
-
-		this.tableSchemas;
-		//TODO: implement migration
 	}
 }
