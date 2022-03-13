@@ -63,6 +63,7 @@ export class SchemaManager {
 	 * @returns {Promise<ClientSchema | null>} parsed client schema
 	 */
 	async readSchema(): Promise<ClientSchema | null> {
+		//TODO: please test this function post issue in todo list if any found
 		let schema: UnParsedSchema | null;
 		let clientSchema: ClientSchema | null;
 
