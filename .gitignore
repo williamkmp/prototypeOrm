@@ -105,4 +105,3 @@ dist
 
 #build file
 build/
-tsconfig.json

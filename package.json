@@ -2,11 +2,11 @@
   "name": "pukis",
   "version": "0.0.1",
   "description": "lightweight mysql orm ",
-  "main": "lib/index.js",
-  "type": "module",
+  "main": "build/index.js",
   "scripts": {
     "build": "tsc"
   },
+  "bin": "build/cli/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/williamkmp/prototypeOrm.git"
