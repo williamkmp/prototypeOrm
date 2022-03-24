@@ -1,9 +1,5 @@
 import mysql from "mysql2/promise";
-import { ClientSchema } from "../schema/schemaManager.js";
-import { TableSchema } from "../table/tableSchema.js";
-
-export type Config = mysql.ConnectionOptions;
-export type Connection = mysql.Connection;
+import { Config, Connection, ClientSchema, TableSchema } from "../TypeDeclaration/type.js";
 
 /**
  * class to manage client schema migration
@@ -34,6 +30,7 @@ export class MigrationHandler {
 	}
 
 	/**
+	 * ASYNC
 	 * get all DROP TABLE queries from the database
 	 * @returns {Promise<Array<string>>} drop queries
 	 */

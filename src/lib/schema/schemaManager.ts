@@ -1,18 +1,12 @@
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
-import { ConnectionOptions } from "mysql2/promise";
-import { BOILERPLATE as SchemaBoilerPlate } from "./schemaBoilerPlate.js";
-import { ColumnSchema } from "../columns/column.js"
-import { TableSchema } from "../table/tableSchema.js"
-
-type config = {
-	[tableName: string]: Array<ColumnSchema>;
-};
-type tables = {
-	DATABASE_CONFIG: ConnectionOptions;
-};
-export type UnParsedSchema = config & tables;
-export type ClientSchema = [ConnectionOptions, Array<TableSchema>];
+import {
+	ClientSchema,
+	ColInfoable,
+	TableSchema,
+	UnParsedSchema,
+	BOILERPLATE as SchemaBoilerPlate,
+} from "../TypeDeclaration/type.js";
 
 /**
  * class to manage user schema
@@ -24,10 +18,6 @@ export type ClientSchema = [ConnectionOptions, Array<TableSchema>];
  * @author william
  */
 export class SchemaManager {
-	/**
-	 * path to the client schema/scema.js
-	 * inside the schema folder
-	 */
 	private clientSchemaFolderPath: string;
 	private clientSchemaFilePath: string;
 
@@ -59,35 +49,33 @@ export class SchemaManager {
 	}
 
 	/**
-	 * try to parse the client schema
+	 * try to parse the client schema if there is error
+	 * return null
 	 * @returns {Promise<ClientSchema | null>} parsed client schema
 	 */
 	async readSchema(): Promise<ClientSchema | null> {
-		//TODO: please test this function post issue in todo list if any found
-		let schema: UnParsedSchema | null;
 		let clientSchema: ClientSchema | null;
 
-		//reading schema
 		try {
-			schema = (await import(this.clientSchemaFilePath)) as UnParsedSchema;
-		} catch (error) {
-			return null;
-		}
+			let unparsedSchema = (await import(this.clientSchemaFilePath)) as UnParsedSchema;
 
-		//parsing
-		let databaseConfig = schema?.DATABASE_CONFIG;
-		let tableSchemas = [];
-
-		for (let tableName in schema) {
-			if (Array.isArray(schema[tableName])) {
-				let tableSchema = new TableSchema(tableName, schema[tableName] as Array<ColumnSchema>)
-				tableSchemas.push(tableSchema);
+			//finding the database config
+			let databaseConfig = unparsedSchema?.DATABASE_CONFIG;
+			if (!databaseConfig) {
+				throw "Database Config not found ";
 			}
-		}
 
-		if (databaseConfig) {
+			//collecting all tableSchema into array of string
+			let tableSchemas = [];
+			for (let tableName in unparsedSchema) {
+				if (Array.isArray(unparsedSchema[tableName])) {
+					let tableSchema = new TableSchema(tableName, unparsedSchema[tableName] as Array<ColInfoable>);
+					tableSchemas.push(tableSchema);
+				}
+			}
+
 			clientSchema = [databaseConfig, tableSchemas];
-		} else {
+		} catch (error) {
 			clientSchema = null;
 		}
 

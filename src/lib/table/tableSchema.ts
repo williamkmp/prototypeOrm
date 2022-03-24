@@ -1,4 +1,4 @@
-import { ColumnSchema } from "../columns/column.js"
+import { ColInfoable, ColumnInfo } from "../TypeDeclaration/type.js";
 
 
 /**
@@ -8,18 +8,21 @@ import { ColumnSchema } from "../columns/column.js"
  */
 export class TableSchema{
     name: string;
-    primaryColumn: ColumnSchema | null;
-    columnsArray: Array<ColumnSchema>; //including the primary key
+    primaryColumn: ColumnInfo | null;
+    columnsArray: Array<ColumnInfo>; //including the primary key
       
-    constructor(name: string, columnSchemas: Array<ColumnSchema>){
+    constructor(name: string, columnSchemas: Array<ColInfoable>){
         this.name = name;
         this.primaryColumn = null;
+        this.columnsArray = [];
+
         columnSchemas.forEach((columnSchema) => {
             if(columnSchema.__columnInfo.isPrimary){
-                this.primaryColumn = columnSchema;
+                this.primaryColumn = columnSchema.__columnInfo;
             }
+            this.columnsArray.push(columnSchema.__columnInfo);
         });
-        this.columnsArray = columnSchemas;
+        
     }
 
     /**

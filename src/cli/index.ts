@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //CLI INDEX.JS
 import { program } from "commander";
-import { SchemaManager } from "../lib/schema/schemaManager.js"
+import { SchemaManager } from "../lib/TypeDeclaration/type.js";
 
 program.name("pukis").description("mini ORM created by William KMP and Andre Wijaya").version("1.0.0");
 
@@ -26,7 +26,7 @@ program
 	.command("generate")
 	.description("generate client code API to interact with database")
 	.action(async (): Promise<void> => {
-        //TODO: implement generate command action
+		//TODO: implement generate command action
 		return;
 	});
 
