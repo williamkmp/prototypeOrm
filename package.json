@@ -1,7 +1,7 @@
 {
-  "name": "pukis",
+  "name": "objectp",
   "version": "0.0.1",
-  "description": "lightweight mysql orm ",
+  "description": "lightweight mysql orm",
   "main": "build/index.js",
   "scripts": {
     "build": "tsc"
@@ -20,7 +20,7 @@
     "vanilla",
     "type"
   ],
-  "author": "WilliamKMP, AndreWijaya",
+  "author": "WilliamKMP",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/williamkmp/prototypeOrm/issues"

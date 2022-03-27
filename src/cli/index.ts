@@ -3,7 +3,7 @@
 import { program } from "commander";
 import { SchemaManager } from "../lib/TypeDeclaration/type.js";
 
-program.name("pukis").description("mini ORM created by William KMP and Andre Wijaya").version("1.0.0");
+program.name("objectp").description("mini ORM created by William KMP").version("0.0.1");
 
 program
 	.command("init")
