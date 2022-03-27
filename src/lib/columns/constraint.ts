@@ -160,7 +160,7 @@ export class StringConstraint implements ColInfoable, Constraintable {
  * returned constraint class if user choose date column type
  * @author william
  */
-export class DateConstraint implements Constraintable {
+export class DateConstraint implements Constraintable, ColInfoable {
 	__columnInfo: ColumnInfo;
 
 	constructor(previousColInfo: ColumnInfo) {
@@ -224,6 +224,41 @@ export class DateConstraint implements Constraintable {
 				this.__columnInfo.query += ` DEFAULT ${value}`;
 			}
 		}
+		return this;
+	}
+}
+
+export class IdConstraint implements ColInfoable {
+	__columnInfo: ColumnInfo;
+
+	constructor(previousColInfo: ColumnInfo) {
+		this.__columnInfo = previousColInfo;
+	}
+
+	/**
+	 * sql PRIMARY constraint, a table can only have one
+	 */
+	primary() {
+		this.__columnInfo.isPrimary = true;
+		return this;
+	}
+
+	/**
+	 * create a foreign key relationship to an existing table
+	 *  table can have multiple or no foreign key.
+	 * @param tableName refrenced table name
+	 */
+	references(tableName: string) {
+		this.__columnInfo.isForeign = true;
+		this.__columnInfo.refrenceTabelName = tableName;
+		return new ForeignConstraint(this);
+	}
+
+	/**
+	 * auto incremet the id
+	 */
+	incremented() {
+		this.__columnInfo.query += " AUTO_INCREMENT";
 		return this;
 	}
 }

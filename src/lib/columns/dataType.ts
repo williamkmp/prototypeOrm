@@ -29,7 +29,7 @@ export class ColumnDataType implements ColInfoable {
 		let _size = size;
 
 		//setting the columnInfo
-		this.__columnInfo.query = `${this.__columnInfo.name}`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\``;
 		this.__columnInfo.type = COLTYPE.NUMBER;
 
 		switch (_size) {
@@ -66,7 +66,7 @@ export class ColumnDataType implements ColInfoable {
 		if (!size || size <= 0) size = 255;
 
 		//setting the columnInfo
-		this.__columnInfo.query = `${this.__columnInfo.name}`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\``;
 		this.__columnInfo.type = COLTYPE.STRING;
 
 		if (0 < size && size <= 65535) {
@@ -85,7 +85,7 @@ export class ColumnDataType implements ColInfoable {
 	 * with format "yyyy-mm-dd"
 	 */
 	date() {
-		this.__columnInfo.query = `${this.__columnInfo.name} DATE`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\` DATE`;
 		this.__columnInfo.type = COLTYPE.STRING;
 		return this;
 	}
@@ -94,7 +94,7 @@ export class ColumnDataType implements ColInfoable {
 	 * sql YEAR column data type
 	 */
 	year() {
-		this.__columnInfo.query = `${this.__columnInfo.name} YEAR`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\` YEAR`;
 		this.__columnInfo.type = COLTYPE.NUMBER;
 		return this;
 	}
@@ -104,7 +104,7 @@ export class ColumnDataType implements ColInfoable {
 	 * with format "hh:mm:ss"
 	 */
 	time() {
-		this.__columnInfo.query = `${this.__columnInfo.name} TIME`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\` TIME`;
 		this.__columnInfo.type = COLTYPE.STRING;
 		return this;
 	}
@@ -114,7 +114,7 @@ export class ColumnDataType implements ColInfoable {
 	 * with default format "yyyy-mm-dd hh:mm:ss"
 	 */
 	dateTime() {
-		this.__columnInfo.query = `${this.__columnInfo.name} DATETIME`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\` DATETIME`;
 		this.__columnInfo.type = COLTYPE.STRING;
 		return this;
 	}
@@ -123,7 +123,7 @@ export class ColumnDataType implements ColInfoable {
 	 * alias for sql BIGINT UNSIGNED NOT NULL UNIQUE PRIMARY
 	 */
 	id() {
-		this.__columnInfo.query = `${this.__columnInfo.name} BIGINT UNSIGNED NOT NULL UNIQUE`;
+		this.__columnInfo.query = `\`${this.__columnInfo.name}\` BIGINT UNSIGNED NOT NULL UNIQUE`;
 		this.__columnInfo.type = COLTYPE.NUMBER;
 		this.__columnInfo.isPrimary = true;
 		this.__columnInfo.isForeign = false;
