@@ -3,6 +3,7 @@ import { Config, Connection, ClientSchema, TableSchema } from "../TypeDeclaratio
 
 /**
  * class to manage client schema migration
+ * @author william
  */
 export class MigrationHandler {
 	private databaseConfig: Config;

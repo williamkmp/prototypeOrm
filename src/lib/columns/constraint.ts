@@ -1,5 +1,8 @@
 import { ColInfoable, ColumnInfo, Constraintable, ForkeyConstraintable } from "../TypeDeclaration/type.js";
-
+/**
+ * constraint class if client choose numeric column type
+ * @author william
+ */
 export class NumericConstraint implements ColInfoable, Constraintable {
 	__columnInfo: ColumnInfo;
 
@@ -87,7 +90,8 @@ export class NumericConstraint implements ColInfoable, Constraintable {
 }
 
 /**
- * returned constraint class if user choose
+ * returned constraint class if user choose string columnt type
+ * @author william
  */
 export class StringConstraint implements ColInfoable, Constraintable {
 	__columnInfo: ColumnInfo;
@@ -152,6 +156,10 @@ export class StringConstraint implements ColInfoable, Constraintable {
 	}
 }
 
+/**
+ * returned constraint class if user choose date column type
+ * @author william
+ */
 export class DateConstraint implements Constraintable {
 	__columnInfo: ColumnInfo;
 

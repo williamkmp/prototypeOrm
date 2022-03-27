@@ -10,6 +10,7 @@ import { SchemaManager } from "../schema/schemaManager.js";                     
 import { ColumnDataType } from "../columns/dataType.js";							//interface for client to choose col data type must return a constraint class
 import { NumericConstraint } from "../columns/constraint.js";						//interface for numeric column constraint type
 import { StringConstraint } from "../columns/constraint.js";						//interface for string column constraint type
+import { DateConstraint } from "../columns/constraint.js";							//interface for date column constraint type
 import { ForeignConstraint } from "../columns/constraint.js";						//interface for foreign key column constraint type
 
 
@@ -53,4 +54,4 @@ export interface ForkeyConstraintable {												//interface after user choose
 	on: (columnName: string) => ColInfoable;
 }
 
-export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE, NumericConstraint};
+export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE, NumericConstraint, StringConstraint, DateConstraint};

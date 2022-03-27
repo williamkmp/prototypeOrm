@@ -10,11 +10,13 @@ export class TableSchema{
     name: string;
     primaryColumn: ColumnInfo | null;
     columnsArray: Array<ColumnInfo>; //including the primary key
+    query: string;
       
     constructor(name: string, columnSchemas: Array<ColInfoable>){
         this.name = name;
         this.primaryColumn = null;
         this.columnsArray = [];
+        this.query = "";
 
         columnSchemas.forEach((columnSchema) => {
             if(columnSchema.__columnInfo.isPrimary){
@@ -34,4 +36,22 @@ export class TableSchema{
 		//TODO: implement create query from this.columnsArray
 		return "";
 	}
+
+    private generateQuery(){
+        let query = `CREATE TABLE \`${this.name}\`(`;
+
+        let columnQuery:Array<string> = []
+        this.columnsArray.forEach((column)=>{
+            if(column.query) columnQuery.push(column.query);
+
+            if(column.isPrimary){
+                columnQuery.push(``)
+            }
+        });
+
+
+
+        query += ");"
+        this.query = query;
+    }
 }

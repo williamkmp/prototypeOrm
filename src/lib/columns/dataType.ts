@@ -1,24 +1,17 @@
-import { ColInfoable, COLTYPE, ColumnInfo, integerSize, NumericConstraint } from "../TypeDeclaration/type.js";
+import { ColInfoable, COLTYPE, ColumnInfo, integerSize, NumericConstraint, StringConstraint, DateConstraint } from "../TypeDeclaration/type.js";
 
 /**
  * class that initialize the sql column data type
  * for client to choose, returns 
  * ColumnConstraint class 
+ * 
+ * @author william
  */
 export class ColumnDataType implements ColInfoable {
 	__columnInfo: ColumnInfo;
 
-	constructor(columnName: string) {
-		this.__columnInfo = {
-			name: columnName,
-			query: null,
-			type: null,
-			isPrimary: false,
-			isOptional: null,
-			isForeign: false,
-			referenceColName: null,
-			refrenceTabelName: null
-		};
+	constructor(columnInfo: ColumnInfo) {
+		this.__columnInfo = columnInfo
 	}
 
 	/**
