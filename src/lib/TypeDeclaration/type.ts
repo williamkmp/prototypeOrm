@@ -1,13 +1,16 @@
-//TYPE FROM MYSQL2 PACKAGE
+//-----------[TYPE FROM MYSQL2 PACKAGE]-----------
 import mysql from "mysql2/promise";
 export type Config = mysql.ConnectionOptions;                                       //Database Configuration i.e. host, name, url, user, pass, etc...
 export type Connection = mysql.Connection;                                          //Database Connection to do operation and executing query 
 
-//TYPE FOR PUKIS PACKAGE
+//-----------[TYPE FOR PUKIS PACKAGE]-----------
 import { TableSchema } from "../table/tableSchema.js";                              //object that hold information for one table (contains many ColumnSchema)
 import { BOILERPLATE } from "../schema/schemaBoilerPlate.js";                       //schema.js bolierplate when user run "init" command
 import { SchemaManager } from "../schema/schemaManager.js";                         //class for managing client schema
-import { ColumnDataType } from "../columns/dataType.js";
+import { ColumnDataType } from "../columns/dataType.js";							//interface for client to choose col data type must return a constraint class
+import { NumericConstraint } from "../columns/constraint.js";						//interface for numeric column constraint type
+import { StringConstraint } from "../columns/constraint.js";						//interface for string column constraint type
+import { ForeignConstraint } from "../columns/constraint.js";						//interface for foreign key column constraint type
 
 
 export type UnParsedSchema = config & tables;                                       //unparsed client schema inside client project schema directory  
@@ -20,11 +23,10 @@ export interface ColumnInfo {                                                   
 	query: string | null;                                                           //sql query for the column in form of string, example "COLNAME INT NOT NULL"
 	type: COLTYPE | null;                                                           //column data type in javascript
 	isPrimary: boolean;                                                             //is column primary key
-	isIncremented: boolean;                                                         //is column auto incremented 
+	isOptional: boolean | null;                                                     //is column auto incremented 
 	isForeign: boolean;                                                             //is column foreign key
 	refrenceTabelName: string | null;                                               //refrenced table name if this column is set to be foreign key, null if not 
 	referenceColName: string | null;                                                //refrenced column name if this column is set to be foreign key, null if not
-    hasDefault: boolean;                                                            //if the column has a default value 
 }
 
 export interface ColInfoable {                                                      //interface that must be implemented for any column related class
@@ -39,5 +41,16 @@ export enum COLTYPE {                                                           
 
 export type integerSize = "TINY" | "SMALL" | "MED" | "DEF" | "BIG";                 //sql int sizes
 
+export interface Constraintable {													//interface for basic constraint columns
+	unique: () => this;
+	notNull: () => this;
+	primary: () => this;
+	references: (tableName: string) => ForeignConstraint;
+	default: (value: any) => this;
+}
 
-export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE};
+export interface ForkeyConstraintable {												//interface after user choose refrences() in Constraintable
+	on: (columnName: string) => ColInfoable;
+}
+
+export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE, NumericConstraint};
