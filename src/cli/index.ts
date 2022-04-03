@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //CLI INDEX.JS
 import { program } from "commander";
-import { SchemaManager, MigrationHandler } from "../lib/TypeDeclaration/type.js";
+import { SchemaManager, MigrationHandler, writeClient } from "../lib/TypeDeclaration/type.js";
 
 let clientSchemaManager = new SchemaManager();
 program.name("objectp").description("mini ORM created by William KMP").version("0.0.1");
@@ -34,7 +34,12 @@ program
 	.command("generate")
 	.description("generate client code API to interact with database")
 	.action(async (): Promise<void> => {
-		//TODO: implement generate command action
+		console.log("\nGeneration started");
+		let clientSchema = await clientSchemaManager.readSchema();
+		if(clientSchema){
+			writeClient(clientSchema);
+		}
+		console.log("\nGeneration finished");
 		return;
 	});
 

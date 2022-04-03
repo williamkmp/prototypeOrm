@@ -14,11 +14,12 @@ import { DateConstraint } from "../columns/constraint.js";							//interface for
 import { ForeignConstraint } from "../columns/constraint.js";						//interface for foreign key column constraint type
 import { IdConstraint } from "../columns/constraint.js";							//interface for id column type, alias for BIGINT UNSIGNED UNIQUE NOT NULL
 import { MigrationHandler } from "../migrator/migrationHandler.js";					//class that handle schema migration to database
+import { writeClient } from "../generator/clientHandler.js";						//function to generate client code and declarations
 
 
 export type UnParsedSchema = config & tables;                                       //unparsed client schema inside client project schema directory  
-type config = {[tableName: string]: Array<ColInfoable>;};                          //table definition inisde unparsedClinetSchema
-type tables = {DATABASE_CONFIG: mysql.ConnectionOptions;};                          //config object inside unparsedClientSchema
+type tables = {[tableName: string]: Array<ColInfoable>;};                          	//table definition inisde unparsedClinetSchema
+type config = {DATABASE_CONFIG: mysql.ConnectionOptions;};                          //config object inside unparsedClientSchema
 export type ClientSchema = [mysql.ConnectionOptions, Array<TableSchema>];           //parsed client schema, obtained from importig then parsing schema.js using MigrationHandler.ts class 
 
 export interface ColumnInfo {                                                       //object that hold information of one column i.e. name, isPrimary, reference, etc
@@ -56,4 +57,15 @@ export interface ForkeyConstraintable {												//interface after user choose
 	on: (columnName: string) => ColInfoable;
 }
 
-export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE, NumericConstraint, StringConstraint, DateConstraint, IdConstraint, MigrationHandler};
+export {
+	BOILERPLATE, 
+	SchemaManager, 
+	MigrationHandler,
+	writeClient,
+	ColumnDataType, 
+	TableSchema, 
+	NumericConstraint, 
+	StringConstraint, 
+	DateConstraint, 
+	IdConstraint, 
+};
