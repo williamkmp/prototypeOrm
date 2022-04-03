@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "lightweight mysql orm",
   "main": "build/index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc"
   },

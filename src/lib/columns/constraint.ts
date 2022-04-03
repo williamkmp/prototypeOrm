@@ -213,7 +213,7 @@ export class DateConstraint implements Constraintable, ColInfoable {
 	/**
 	 * set a default value if the column value is not defined on insert
 	 * set this to "@NOW" to set default as CURRENT_TIMESTAMP
-	 * @param value default value if it wasnt inserted
+	 * @param {value|"@NOW" } default value if it wasnt inserted
 	 */
 	default(value: string | "@NOW") {
 		if (!this.__columnInfo.query?.includes(`DEFAULT`)) {

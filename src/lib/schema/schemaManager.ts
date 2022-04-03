@@ -18,11 +18,9 @@ import {
  * @author william
  */
 export class SchemaManager {
-	private clientSchemaFolderPath: string;
 	private clientSchemaFilePath: string;
 
 	constructor() {
-		this.clientSchemaFolderPath = "file:///" + join(process.cwd(), "/schema");
 		this.clientSchemaFilePath = "file:///" + join(process.cwd(), "/schema/schema.js");
 	}
 
@@ -42,7 +40,7 @@ export class SchemaManager {
 	 * @returns {void}
 	 */
 	create(): void {
-		if (!existsSync(this.clientSchemaFolderPath)) {
+		if (!existsSync("schema")) {
 			mkdirSync("schema");
 		}
 		writeFileSync("schema/schema.js", SchemaBoilerPlate);

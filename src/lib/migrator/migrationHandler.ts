@@ -56,20 +56,28 @@ export class MigrationHandler {
 	 * ASYNC
 	 * migrate parsed client schema to the database
 	 * using connection created from DATABSE_CONFIG
-	 * @returns { Promise<void> } database connection
+	 * @returns { Promise<Boolean> } database connection
 	 */
-	async migrate(): Promise<void> {
+	async migrate(): Promise<Boolean> {
 		//TODO: test this function
-		let database = await this.connect();
-		let createQueries = this.tableSchemas.map((schema) => schema.getCreateQuery());
-		let dropQueries = await this.getEmptyQueries();
-		await database.execute("SET foreign_key_checks=0;");
-		createQueries.forEach(async (query) => {
-			await database.execute(query);
-		});
-		dropQueries.forEach(async (query) => {
-			await database.execute(query);
-		});
-		await database.execute("SET foreign_key_checks=1;");
+		let status = true;
+		try {
+			let database = await this.connect();
+			let createQueries = this.tableSchemas.map((schema) => schema.generateQuery());
+			let dropQueries = await this.getEmptyQueries();
+			await database.execute("SET foreign_key_checks=0;");
+			dropQueries.forEach(async (query) => {
+				await database.execute(query);
+			});
+			createQueries.forEach(async (query) => {
+				await database.execute(query);
+			});
+			await database.execute("SET foreign_key_checks=1;");
+		} catch (error) {
+			status = false;
+		} finally {
+			this.database?.end();
+			return status;
+		}
 	}
 }

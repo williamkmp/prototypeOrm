@@ -1,4 +1,4 @@
-import { ColInfoable, COLTYPE, ColumnInfo, integerSize, NumericConstraint, StringConstraint, DateConstraint } from "../TypeDeclaration/type.js";
+import { ColInfoable, COLTYPE, ColumnInfo, integerSize, NumericConstraint, StringConstraint, DateConstraint, IdConstraint } from "../TypeDeclaration/type.js";
 
 /**
  * class that initialize the sql column data type
@@ -77,7 +77,7 @@ export class ColumnDataType implements ColInfoable {
 			this.__columnInfo.query += ` LONGTEXT`;
 		}
 
-		return this; //TODO return ColumnConstarint if class is finished
+		return new StringConstraint(this.__columnInfo);
 	}
 
 	/**
@@ -87,7 +87,7 @@ export class ColumnDataType implements ColInfoable {
 	date() {
 		this.__columnInfo.query = `\`${this.__columnInfo.name}\` DATE`;
 		this.__columnInfo.type = COLTYPE.STRING;
-		return this;
+		return new DateConstraint(this.__columnInfo);
 	}
 
 	/**
@@ -96,7 +96,7 @@ export class ColumnDataType implements ColInfoable {
 	year() {
 		this.__columnInfo.query = `\`${this.__columnInfo.name}\` YEAR`;
 		this.__columnInfo.type = COLTYPE.NUMBER;
-		return this;
+		return new DateConstraint(this.__columnInfo);
 	}
 
 	/**
@@ -106,7 +106,7 @@ export class ColumnDataType implements ColInfoable {
 	time() {
 		this.__columnInfo.query = `\`${this.__columnInfo.name}\` TIME`;
 		this.__columnInfo.type = COLTYPE.STRING;
-		return this;
+		return new DateConstraint(this.__columnInfo);
 	}
 
 	/**
@@ -116,7 +116,7 @@ export class ColumnDataType implements ColInfoable {
 	dateTime() {
 		this.__columnInfo.query = `\`${this.__columnInfo.name}\` DATETIME`;
 		this.__columnInfo.type = COLTYPE.STRING;
-		return this;
+		return new DateConstraint(this.__columnInfo);
 	}
 
 	/**
@@ -125,8 +125,6 @@ export class ColumnDataType implements ColInfoable {
 	id() {
 		this.__columnInfo.query = `\`${this.__columnInfo.name}\` BIGINT UNSIGNED NOT NULL UNIQUE`;
 		this.__columnInfo.type = COLTYPE.NUMBER;
-		this.__columnInfo.isPrimary = true;
-		this.__columnInfo.isForeign = false;
-		return this;
+		return new IdConstraint(this.__columnInfo);
 	}
 };

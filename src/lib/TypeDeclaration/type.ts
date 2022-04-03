@@ -12,6 +12,8 @@ import { NumericConstraint } from "../columns/constraint.js";						//interface f
 import { StringConstraint } from "../columns/constraint.js";						//interface for string column constraint type
 import { DateConstraint } from "../columns/constraint.js";							//interface for date column constraint type
 import { ForeignConstraint } from "../columns/constraint.js";						//interface for foreign key column constraint type
+import { IdConstraint } from "../columns/constraint.js";							//interface for id column type, alias for BIGINT UNSIGNED UNIQUE NOT NULL
+import { MigrationHandler } from "../migrator/migrationHandler.js";					//class that handle schema migration to database
 
 
 export type UnParsedSchema = config & tables;                                       //unparsed client schema inside client project schema directory  
@@ -54,4 +56,4 @@ export interface ForkeyConstraintable {												//interface after user choose
 	on: (columnName: string) => ColInfoable;
 }
 
-export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE, NumericConstraint, StringConstraint, DateConstraint};
+export {ColumnDataType, TableSchema, SchemaManager, BOILERPLATE, NumericConstraint, StringConstraint, DateConstraint, IdConstraint, MigrationHandler};
